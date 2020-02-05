@@ -4,38 +4,44 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using ClassLibrary1;
 
-namespace ConsoleApp26
+namespace ConsoleApp27
 {
+
     class Program
     {
+
         static void Main(string[] args)
         {
             do
             {
-                var D = new SortedDeque<int>();
-                string path = @"C:\\Users\\DNS\\source\\repos\\ConsoleApp26\\ConsoleApp26\\integers.txt";
+                var firstList = ListOfFigures<IGeometry>.GetListOfFigurues(8, 2);
+                var secondList = ListOfFigures<IGeometry>.GetListOfFigurues(1, 4);
 
-                StreamReader sr = new StreamReader(path);
-
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-
-                    Console.WriteLine(line);
-                    int x = int.Parse(line);
-                    if (x >= -100 && x <= 100)
-                        D.PushBack(x);
-                }
-
-                while (D.Count >= 2)
-                {
-                    string[] text = (D.PopBack().ToString() + " , -" + D.PopFront().ToString()).Split('\n');
-                    File.AppendAllLines(@"C:\\Users\\DNS\\source\\repos\\ConsoleApp26\\ConsoleApp26\\results.txt", text);
-                }
-                Console.WriteLine("Press <escape> to exit...");
             } while (Console.ReadKey().Key != ConsoleKey.Escape);
         }
+        static void Serialization(ListOfFigures<IGeometry> Figures)
+        {
+            // какой блять дабл
+            // пиши Т 
+            // у нас лист фигур
+            // ф и г у р!!! там лежать будут серклы и трианглы!
+            XmlSerializer formatter = new XmlSerializer(typeof(ListOfFigures<T>));
+            FileStream fs = new FileStream("figures.xml", FileMode.OpenOrCreate);
+            formatter.Serialize(fs, Figures);
+            fs.Close();
+            // А ЗАКРЫВАТЬ ПОТОК!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
+        static void DeSerialization()
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(ListOfFigures<T>));
+            FileStream fs = new FileStream("figures.xml", FileMode.OpenOrCreate);
+            var newFigures = (new ListOfFigures<IGeometry>());
+            newFigures = (ListOfFigures<IGeometry>)formatter.Deserialize(fs);
+
+        }
+
     }
 }
